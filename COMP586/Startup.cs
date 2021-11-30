@@ -9,6 +9,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using COMP586.Models;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using System;
 
 namespace COMP586
 {
@@ -22,14 +26,18 @@ namespace COMP586
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddDbContext<COMP586VehiclesDBContext>(options =>
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("VehiclesConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddIdentityCore<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentityCore<AppIdentityUser>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddAuthentication(opt =>
             {
@@ -45,8 +53,8 @@ namespace COMP586
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
-                        ValidIssuer = "https://localhost:44358/",
-                        ValidAudience = "https://localhost:44358/",
+                        ValidIssuer = "https://localhost:44358",
+                        ValidAudience = "https://localhost:44358",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN586JLORDVehicleInfoS#cretK#y"))
                     };
                 });
@@ -60,7 +68,28 @@ namespace COMP586
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "VehicleInfoAPI", Version = "v1" });
+            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "VehicleInfoAPI", Version = "v1" });
+                var jwtSecurityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "JWT Authentication",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
+                });
             });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using COMP586.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Configuration;
+using Newtonsoft.Json;
 
 namespace COMP586.Controllers
 {
@@ -21,41 +24,43 @@ namespace COMP586.Controllers
         {
             _logger = logger;
         }
+        public IConfiguration Configuration { get; }
 
-        /*[HttpGet]
+        [HttpGet]
         [Authorize]
-        public IEnumerable<VehicleInfo> Get()
+        public string Get(int owner)
         {
-            using (SqlConnection conn = new SqlConnection())
+            string jsonified = "";
+            using (SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("VehiclesConnection")))
             {
-                conn.ConnectionString = "Server=WESTON\\SQLEXPRESS;Database=COMP586-VehiclesDB;Trusted_Connection=True;MultipleActiveResultSets=true";
-                try
+                string query = "SELECT * FROM VehicleInfo WHERE ownerID=@owner";
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
-                    SqlCommand getVehicleInfo = new SqlCommand();
-                    getVehicleInfo.CommandType = System.Data.CommandType.Text;
-                    getVehicleInfo.CommandText = "SELECT * FROM VehicleInfo";
-                    getVehicleInfo.Connection = conn;
-                    conn.Open();
-                    Console.WriteLine("Connection opened to SQL Vehicles DB.");
-
-                    SqlDataAdapter da = new SqlDataAdapter(getVehicleInfo);
-                    da.Fill(dataTable);
-
-                    conn.Close();
-                    Console.WriteLine("SQL Vehicles DB connection closed.");
-                    da.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Could not open connection to SQL server!");
+                    conn.Open(); //TODO: "The ConnectionString property has not been initialized."
+                    List<VehicleInfo> returnData = new List<VehicleInfo>();
+                    var reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            VehicleInfo vehicle = new VehicleInfo()
+                            {
+                                VehicleId = reader.GetInt32(0),
+                                Vin = reader["VIN"].ToString(),
+                                ModelYear = reader.GetInt32(2),
+                                Make = reader["make"].ToString(),
+                                Model = reader["model"].ToString(),
+                                Color = reader["color"].ToString(),
+                                Mileage = reader.GetInt32(6),
+                                OwnerId = reader.GetInt32(7),
+                            };
+                            returnData.Add(vehicle);
+                        }
+                    }
+                    jsonified = JsonConvert.SerializeObject(returnData);
                 }
             }
-
-            return Enumerable.Range(1, 5).Select(index => new VehicleInfo
-            {
-
-            })
-            .ToArray();
-        }*/
+            return jsonified;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace COMP586.Identity
 {
-    public class ApplicationUser : IdentityUser
+    public class AppIdentityUser : IdentityUser
     {
     }
 }

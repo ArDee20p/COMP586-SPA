@@ -1,8 +1,11 @@
-<h1 id="tableLabel">Vehicle Information</h1>
+<h1 id="tableLabel">Vehicle Information for Owner: <select id="dropdown">
+  <option value="?owner=0">Everyman, Bob</option>
+  <option value="?owner=1">Smith, John</option>
+  <option value="?owner=2">Yeterin, Yakolev</option>
+</select></h1>
 
 <p *ngIf="!vehicles"><em>Loading...</em></p>
-
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehicles">
+<table class='table table-striped' aria-labelledby="tableLabel">
   <thead>
     <tr>
       <th>VIN</th>

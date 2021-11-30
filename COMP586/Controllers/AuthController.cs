@@ -17,8 +17,8 @@ namespace COMP586.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        public AuthController(UserManager<ApplicationUser> userManager)
+        private readonly UserManager<Identity.AppIdentityUser> _userManager;
+        public AuthController(UserManager<Identity.AppIdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -27,7 +27,7 @@ namespace COMP586.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login(UserDto userDto)
         {
-            ApplicationUser user = await _userManager.FindByNameAsync(userDto.UserName);
+            Identity.AppIdentityUser user = await _userManager.FindByNameAsync(userDto.UserName);
             
             if (user is null)
             {
@@ -45,8 +45,8 @@ namespace COMP586.Controllers
             SigningCredentials signingCreds = new(secretKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken tokenOptions = new(
-                issuer: "http://localhost:5000",
-                audience: "http://localhost:5000",
+                issuer: "https://localhost:44358",
+                audience: "https://localhost:44358",
                 claims: new List<Claim>(),
                 expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: signingCreds
@@ -60,7 +60,7 @@ namespace COMP586.Controllers
         [Route("Create")]
         public async Task<IActionResult> Create(string userName, string password)
         {
-            ApplicationUser user = new()
+            Identity.AppIdentityUser user = new()
             {
                 UserName = userName,
                 Email = $"{userName}@gmail.com",
