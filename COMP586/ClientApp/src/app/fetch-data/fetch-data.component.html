@@ -1,8 +1,9 @@
 <h1 id="tableLabel">Vehicle Information for Owner: <select id="dropdown">
-  <option value="?owner=0">Everyman, Bob</option>
-  <option value="?owner=1">Smith, John</option>
-  <option value="?owner=2">Yeterin, Yakolev</option>
+  <option value="0">Everyman, Bob</option>
+  <option value="1">Smith, John</option>
+  <option value="2">Yeterin, Yakolev</option>
 </select></h1>
+<!--TODO: figure out how to get the value of this dropdown to change the displayed data-->
 
 <p *ngIf="!vehicles"><em>Loading...</em></p>
 <table class='table table-striped' aria-labelledby="tableLabel">

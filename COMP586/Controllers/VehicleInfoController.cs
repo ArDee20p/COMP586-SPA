@@ -6,10 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Configuration;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace COMP586.Controllers
 {
@@ -18,49 +17,22 @@ namespace COMP586.Controllers
     [Route("[controller]")]
     public class VehicleInfoController : ControllerBase
     {
-        private readonly ILogger<VehicleInfoController> _logger;
+        private readonly COMP586VehiclesDBContext db;
 
-        public VehicleInfoController(ILogger<VehicleInfoController> logger)
+        public VehicleInfoController(COMP586VehiclesDBContext db)
         {
-            _logger = logger;
+            this.db = db;
         }
+
         public IConfiguration Configuration { get; }
 
         [HttpGet]
         [Authorize]
-        public string Get(int owner)
+        public async Task<List<VehicleInfo>> GetVehicleInfosAsync(int owner)
         {
-            string jsonified = "";
-            using (SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("VehiclesConnection")))
-            {
-                string query = "SELECT * FROM VehicleInfo WHERE ownerID=@owner";
-                using (SqlCommand command = new SqlCommand(query, conn))
-                {
-                    conn.Open(); //TODO: "The ConnectionString property has not been initialized."
-                    List<VehicleInfo> returnData = new List<VehicleInfo>();
-                    var reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            VehicleInfo vehicle = new VehicleInfo()
-                            {
-                                VehicleId = reader.GetInt32(0),
-                                Vin = reader["VIN"].ToString(),
-                                ModelYear = reader.GetInt32(2),
-                                Make = reader["make"].ToString(),
-                                Model = reader["model"].ToString(),
-                                Color = reader["color"].ToString(),
-                                Mileage = reader.GetInt32(6),
-                                OwnerId = reader.GetInt32(7),
-                            };
-                            returnData.Add(vehicle);
-                        }
-                    }
-                    jsonified = JsonConvert.SerializeObject(returnData);
-                }
-            }
-            return jsonified;
+            return await db.VehicleInfos
+                .FromSqlInterpolated($"SELECT * FROM dbo.VehicleInfo WHERE ownerID={owner}")
+                .ToListAsync();
         }
     }
 }

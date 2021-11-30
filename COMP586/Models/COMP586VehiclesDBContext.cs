@@ -8,14 +8,7 @@ namespace COMP586.Models
 {
     public partial class COMP586VehiclesDBContext : DbContext
     {
-        public COMP586VehiclesDBContext()
-        {
-        }
-
-        public COMP586VehiclesDBContext(DbContextOptions<COMP586VehiclesDBContext> options)
-            : base(options)
-        {
-        }
+        public COMP586VehiclesDBContext(DbContextOptions options) : base(options) {}
 
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<VehicleInfo> VehicleInfos { get; set; }
