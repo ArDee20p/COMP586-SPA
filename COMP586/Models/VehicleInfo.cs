@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace COMP586.Models
 {
     [Table("VehicleInfo")]
-    public partial class VehicleInfo
+    public class VehicleInfo
     {
         [Key]
         [Column("vehicleID")]

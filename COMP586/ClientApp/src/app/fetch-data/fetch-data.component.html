@@ -1,4 +1,4 @@
-<h1 id="tableLabel">Vehicle Information for Owner: <select id="dropdown">
+<h1 id="tableLabel">Vehicle Information for Owner: <select #dropdown (change)="onChange($event, dropdown.value)">
   <option value="0">Everyman, Bob</option>
   <option value="1">Smith, John</option>
   <option value="2">Yeterin, Yakolev</option>
@@ -19,7 +19,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let vehicle of vehicles">
-      <td>{{ vehicle.VIN }}</td>
+      <td>{{ vehicle.vin }}</td>
       <td>{{ vehicle.modelYear }}</td>
       <td>{{ vehicle.make }}</td>
       <td>{{ vehicle.model }}</td>
@@ -28,3 +28,4 @@
     </tr>
   </tbody>
 </table>
+<!--TODO: Present this data more modified than just a table presentation.-->
