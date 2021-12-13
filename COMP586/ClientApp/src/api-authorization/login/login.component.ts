@@ -26,6 +26,6 @@ export class LoginComponent implements OnInit {
         this.invalidLogin = false;
       }, () => this.invalidLogin = true);
 
-    if (!this.invalidLogin) this.router.navigate(['/fetch-data']);
+    if (!this.invalidLogin) this.router.navigate(['/']);
   }
 }

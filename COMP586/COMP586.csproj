@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -39,6 +39,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\owner-add\file.ts" />
     <None Remove="ClientApp\src\app\owner-add\owner-add.component.ts" />
+    <None Remove="ClientApp\src\app\requestInterceptor.ts" />
     <None Remove="ClientApp\src\app\vehicle-add\vehicle-add.component.ts" />
   </ItemGroup>
 

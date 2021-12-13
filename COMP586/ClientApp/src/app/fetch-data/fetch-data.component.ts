@@ -1,26 +1,36 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, OnChanges } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  templateUrl: './fetch-data.component.html',
+  styleUrls: ['./fetch-data.component.css']
 })
-//TODO: REMINDER - the url for the GET was wrong the whole time! pay attention to URLs in Swagger.
+
 export class FetchDataComponent {
   public vehicles: string;
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    let customHeaders = new HttpHeaders({ Authorization: "Bearer " + localStorage.getItem("token") });
-    const requestOptions = { headers: customHeaders };
-    http.get<string>(baseUrl + 'VehicleInfo?owner=0', requestOptions).subscribe(result => {
+  public owners: string;
+
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router) { }
+
+  ngOnInit() {
+    this.http.get<string>(this.baseUrl + 'VehicleInfo?owner=0').subscribe(result => {
+      this.vehicles = result;
+    }, error => console.error(error));
+
+    this.http.get<string>(this.baseUrl + 'Owner').subscribe(result => {
+      this.owners = result;
+    }, error => console.error(error));
+  }
+
+  onChange(elementId) {
+    this.http.get<string>(this.baseUrl + 'VehicleInfo?owner=' + elementId).subscribe(result => {
       this.vehicles = result;
     }, error => console.error(error));
   }
-  onChange($event, elementId, @Inject('BASE_URL') baseUrl: string) {
-    var http: HttpClient;
-    let customHeaders = new HttpHeaders({ Authorization: "Bearer " + localStorage.getItem("token") });
-    const requestOptions = { headers: customHeaders };
-    http.get<string>(baseUrl + 'VehicleInfo?owner=' + elementId, requestOptions).subscribe(result => {
-      this.vehicles = result;
-    }, error => console.error(error));
+
+  addNew(elementId) {
+    this.router.navigate(['/vehicle-add', elementId]);
   }
 }

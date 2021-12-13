@@ -34,5 +34,14 @@ namespace COMP586.Controllers
                 .FromSqlInterpolated($"SELECT * FROM dbo.VehicleInfo WHERE ownerID={owner}")
                 .ToListAsync();
         }
+
+        [HttpPost]
+        [Authorize]
+        [Route("addVehicle")]
+        public async void PostVehicleInfoAsync(VehicleInfo newVehicle)
+        {
+            await db.VehicleInfos.AddAsync(newVehicle);
+            db.SaveChanges();
+        }
     }
 }

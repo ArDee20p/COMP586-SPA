@@ -1,31 +1,20 @@
-<h1 id="tableLabel">Vehicle Information for Owner: <select #dropdown (change)="onChange($event, dropdown.value)">
-  <option value="0">Everyman, Bob</option>
-  <option value="1">Smith, John</option>
-  <option value="2">Yeterin, Yakolev</option>
+<h1 id="tableLabel">Vehicle Information for Owner: <select #dropdown (change)="onChange(dropdown.value)">
+  <option *ngFor="let owner of owners" value="{{owner.ownerId}}">{{ owner.lastName }}, {{ owner.firstName }}</option>
 </select></h1>
-<!--TODO: figure out how to get the value of this dropdown to change the displayed data-->
 
 <p *ngIf="!vehicles"><em>Loading...</em></p>
-<table class='table table-striped' aria-labelledby="tableLabel">
-  <thead>
-    <tr>
-      <th>VIN</th>
-      <th>Model Year</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Color</th>
-      <th>Mileage</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let vehicle of vehicles">
-      <td>{{ vehicle.vin }}</td>
-      <td>{{ vehicle.modelYear }}</td>
-      <td>{{ vehicle.make }}</td>
-      <td>{{ vehicle.model }}</td>
-      <td>{{ vehicle.color }}</td>
-      <td>{{ vehicle.mileage }}</td>
-    </tr>
-  </tbody>
-</table>
-<!--TODO: Present this data more modified than just a table presentation.-->
+
+<div class="card-container">
+  <div class="card" *ngFor="let vehicle of vehicles">
+    <img src="/assets/placeholder.png" style="width:100px; height:100px;" />
+    <h4>{{ vehicle.modelYear }} {{ vehicle.make }} {{ vehicle.model }}</h4>
+    <p>{{ vehicle.color }}, {{ vehicle.mileage | number }} miles</p>
+    <h5>VIN: {{ vehicle.vin }}</h5>
+  </div>
+  <div class="card">
+    <img src="/assets/addnew.png" style="width:100px; height:120px;"/>
+    <form (ngSubmit)="addNew(dropdown.value)">
+      <button class="btn btn-lg btn-primary btn-block" name="addVehicle" type="submit" value="addVehicle">Add new vehicle for owner</button>
+    </form>
+  </div>
+</div>

@@ -19,7 +19,7 @@ namespace COMP586.Models
 
             modelBuilder.Entity<Owner>(entity =>
             {
-                entity.Property(e => e.OwnerId).ValueGeneratedNever();
+                entity.Property(e => e.OwnerId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.FirstName).IsUnicode(false);
 
@@ -32,7 +32,7 @@ namespace COMP586.Models
 
             modelBuilder.Entity<VehicleInfo>(entity =>
             {
-                entity.Property(e => e.VehicleId).ValueGeneratedNever();
+                entity.Property(e => e.VehicleId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Color).IsUnicode(false);
 
