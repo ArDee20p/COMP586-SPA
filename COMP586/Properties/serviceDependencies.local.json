@@ -3,16 +3,16 @@
     "secrets1": {
       "type": "secrets.user"
     },
-    "mssql1": {
-      "resourceId": null,
-      "type": "mssql.local",
-      "connectionId": "MainDB",
+    "mssql3": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/comp586jlord/databases/COMP586-Server",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:IdentityConnection",
       "secretStore": "LocalSecretsFile"
     },
-    "mssql2": {
-      "resourceId": null,
-      "type": "mssql.onprem",
-      "connectionId": "VehiclesDB",
+    "mssql4": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/comp586jlord/databases/COMP586-VehiclesDB",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:VehiclesConnection",
       "secretStore": "LocalSecretsFile"
     }
   }

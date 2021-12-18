@@ -3,13 +3,13 @@
     "secrets1": {
       "type": "secrets"
     },
-    "mssql1": {
+    "mssql3": {
       "type": "mssql",
-      "connectionId": "MainDB"
+      "connectionId": "ConnectionStrings:IdentityConnection"
     },
-    "mssql2": {
+    "mssql4": {
       "type": "mssql",
-      "connectionId": "VehiclesDB"
+      "connectionId": "ConnectionStrings:VehiclesConnection"
     }
   }
 }
