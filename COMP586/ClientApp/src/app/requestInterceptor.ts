@@ -8,6 +8,7 @@ export class RequestInterceptor implements HttpInterceptor {
     const modifiedReq = req.clone({
       headers: new HttpHeaders({
         'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'Access-Control-Allow-Origin': 'https://comp586spajlord.azurewebsites.net',
       })
     });
     return next.handle(modifiedReq);
