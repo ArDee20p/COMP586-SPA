@@ -4,5 +4,7 @@ Single-page web application for retrieving vehicle information, created with Ang
 The Azure WebApp for this project is available [here](https://comp586spajlord.azurewebsites.net).
 
 For testing purposes, an available user account for the site is:
-U: testing@gmail.com
-P: T3st!ng
+
+> U: testing@gmail.com
+> 
+> P: T3st!ng
